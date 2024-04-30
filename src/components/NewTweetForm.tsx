@@ -91,6 +91,7 @@ function Form() {
           style={{ height: 0 }}
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={(e)=>{if(e.key === 'Enter') handleSubmit(e) }}
           className="flex-grow resize-none overflow-hidden p-4 text-lg outline-none"
           placeholder="What's happening?"
         />
