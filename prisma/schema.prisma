@@ -77,8 +77,8 @@ model User {
     // Non-Next Auth
     tweets    Tweet[]
     likes     Like[]
-    followers User[]  @relation(name: "Followers")
-    follows   User[]  @relation(name: "Followers")
+    followers User[]  @relation(name: "Followers") // Users that follow this user
+    follows   User[]  @relation(name: "Followers") // Users that this user follows. This is a self-relation to "followers", thats why we gave them the same name.
 }
 
 model VerificationToken {
