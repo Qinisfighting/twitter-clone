@@ -111,11 +111,50 @@ function TweetCard({
     },
   });
 
+
+  const deteleTweet = api.tweet.delete.useMutation({
+    onSuccess: () => {
+      const updateData: Parameters<
+        typeof trpcUtils.tweet.infiniteFeed.setInfiniteData
+      >[1] = (oldData) => {
+        if (oldData == null) return;
+
+        return {
+          ...oldData,
+          pages: oldData.pages.map((page) => {
+            return {
+              ...page,
+              tweets: page.tweets.filter((tweet) => {
+                return tweet.id !== id;
+              }),
+            };
+          }),
+        };
+      };
+
+      trpcUtils.tweet.infiniteFeed.setInfiniteData({}, updateData);
+      trpcUtils.tweet.infiniteFeed.setInfiniteData(
+        { onlyFollowing: true },
+        updateData
+      );
+      trpcUtils.tweet.infiniteProfileFeed.setInfiniteData(
+        { userId: user.id },
+        updateData
+      );
+    },
+  });
   function handleToggleLike() {
     toggleLike.mutate({ id });
   }
 
+  function handleDelete() {
+    deteleTweet.mutate({ id });
+    // Call the delete tweet API or perform the necessary logic to delete the tweet
+    // You can use the tweet id to identify the tweet to be deleted
+  }
+
   return (
+    <div className="flex justify-between items-center">
     <li className="flex gap-4 border-b px-4 py-4">
       <Link href={`/profiles/${user.id}`}>
         <ProfileImage src={user.image} />
@@ -142,6 +181,8 @@ function TweetCard({
         />
       </div>
     </li>
+    <button onClick={() => handleDelete()} className="text-red-500 mr-10">❌</button>
+    </div>
   );
 }
 
