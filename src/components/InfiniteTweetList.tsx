@@ -7,6 +7,7 @@ import { IconHoverEffect } from "./IconHoverEffect";
 import { api } from "~/utils/api";
 import { LoadingSpinner } from "./LoadingSpinner";
 
+
 type Tweet = {
   id: string;
   content: string;
@@ -68,6 +69,7 @@ function TweetCard({
   likeCount,
   likedByMe,
 }: Tweet) {
+  const session = useSession();
   const trpcUtils = api.useContext();
   const toggleLike = api.tweet.toggleLike.useMutation({
     onSuccess: ({ addedLike }) => {
@@ -149,8 +151,6 @@ function TweetCard({
 
   function handleDelete() {
     deteleTweet.mutate({ id });
-    // Call the delete tweet API or perform the necessary logic to delete the tweet
-    // You can use the tweet id to identify the tweet to be deleted
   }
 
   return (
@@ -181,7 +181,9 @@ function TweetCard({
         />
       </div>
     </li>
-    <button onClick={() => handleDelete()} className="text-red-500 mr-10">❌</button>
+       {session.status === "authenticated" && 
+           <button onClick={() => handleDelete()} className="text-red-500 mr-10">❌</button>
+       }
     </div>
   );
 }
