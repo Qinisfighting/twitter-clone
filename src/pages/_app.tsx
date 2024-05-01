@@ -5,7 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import { api } from "~/utils/api";
 
 import "~/styles/globals.css";
-import Head from "next/head";
+import Head from "next/head";  
 import { SideNav } from "~/components/SideNav";
 
 const MyApp: AppType<{ session: Session | null }> = ({
